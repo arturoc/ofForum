@@ -481,9 +481,15 @@ class Gdn_Format {
          if (!isset($GuestHourOffset)) {
             $GuestTimeZone = C('Garden.GuestTimeZone');
             if ($GuestTimeZone) {
-               $TimeZone = new DateTimeZone($GuestTimeZone);
-               $Offset = $TimeZone->getOffset(new DateTime('now', new DateTimeZone('UTC')));
-               $GuestHourOffset = floor($Offset / 3600);
+               try {
+                  $TimeZone = new DateTimeZone($GuestTimeZone);
+                  $Offset = $TimeZone->getOffset(new DateTime('now', new DateTimeZone('UTC')));
+                  $GuestHourOffset = floor($Offset / 3600);
+               } catch (Exception $Ex) {
+                  $GuestHourOffset = 0;
+                  // Do nothing, but don't set the timezone.
+                  LogException($Ex);
+               }
             }
          }
          $HourOffset = $GuestHourOffset;
@@ -1264,6 +1270,20 @@ EOT;
          return $Result;
       }
    }
+   
+   /**
+    * 
+    * 
+    * @param string $Str
+    * @return string
+    * @since 2.1
+    */
+   public static function TextEx($Str) {
+      $Str = self::Text($Str);
+      $Str = self::Links($Str);
+      $Str = self::Mentions($Str);
+      return $Str;
+   }
 
    /**
     * Takes a mixed variable, formats it in the specified format type, and
@@ -1375,9 +1395,14 @@ EOT;
          if (!isset($GuestHourOffset)) {
             $GuestTimeZone = C('Garden.GuestTimeZone');
             if ($GuestTimeZone) {
-               $TimeZone = new DateTimeZone($GuestTimeZone);
-               $Offset = $TimeZone->getOffset(new DateTime('now', new DateTimeZone('UTC')));
-               $GuestHourOffset = floor($Offset / 3600);
+               try {
+                  $TimeZone = new DateTimeZone($GuestTimeZone);
+                  $Offset = $TimeZone->getOffset(new DateTime('now', new DateTimeZone('UTC')));
+                  $GuestHourOffset = floor($Offset / 3600);
+               } catch (Exception $Ex) {
+                  $GuestHourOffset = 0;
+                  LogException($Ex);
+               }
             }
          }
          $HourOffset = $GuestHourOffset;

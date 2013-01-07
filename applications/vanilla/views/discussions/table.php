@@ -6,6 +6,8 @@
 $Session = Gdn::Session();
 include_once $this->FetchViewLocation('helper_functions', 'discussions', 'vanilla');
 
+if (!function_exists('WriteDiscussionRow')):
+
 /**
  * Writes a discussion in table row format.
  */
@@ -45,7 +47,7 @@ function WriteDiscussionRow($Discussion, &$Sender, &$Session, $Alt2) {
    $LastPageUrl = DiscussionUrl($Discussion, FALSE).'#latest';
 ?>
 <tr id="Discussion_<?php echo $Discussion->DiscussionID; ?>" class="<?php echo $CssClass; ?>">
-   <?php echo AdminCheck($Discussion, array('<td class="CheckBoxColumn">', '</td>')); ?>
+   <?php echo AdminCheck($Discussion, array('<td class="CheckBoxColumn"><div class="Wrap">', '</div></td>')); ?>
 	<td class="DiscussionName">
 		<div class="Wrap">
          <span class="Options">
@@ -127,6 +129,8 @@ function WriteDiscussionRow($Discussion, &$Sender, &$Session, $Alt2) {
 </tr>
 <?php
 }
+
+endif;
 
 /**
  * Render the page.
