@@ -1597,6 +1597,17 @@ class ImportModel extends Gdn_Model {
 
       }
       
+      if ($this->ImportExists('Tag') && $this->ImportExists('TagDiscussion')) {
+         $Sqls['Tag.CoundDiscussions'] = $this->GetCountSQL('count', 'Tag', 'TagDiscussion', 'CountDiscussions', 'TagID');
+      }
+      
+      if ($this->ImportExists('Poll')) {
+         $Sqls['PollOption.CountVotes'] = $this->GetCountSQL('count', 'PollOption', 'PollVote', 'CountVotes', 'PollOptionID');
+         
+         $Sqls['Poll.CountOptions'] = $this->GetCountSQL('count', 'Poll', 'PollOption', 'CountOptions', 'PollID');
+         $Sqls['Poll.CountVotes'] = $this->GetCountSQL('sum', 'Poll', 'PollOption', 'CountVotes', 'CountVotes', 'PollID');
+      }
+      
       if ($this->ImportExists('Activity', 'ActivityType')) {
          $Sqls['Activity.ActivityTypeID'] = "
             update :_Activity a
